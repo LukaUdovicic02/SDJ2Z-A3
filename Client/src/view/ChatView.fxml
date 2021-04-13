@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TableColumn?>
+<AnchorPane prefHeight="400.0" prefWidth="403.0" xmlns="http://javafx.com/javafx/11.0.2" xmlns:fx="http://javafx.com/fxml/1" fx:controller="view.ChatViewController">
+   <children>
+      <HBox alignment="CENTER" layoutY="328.0" prefHeight="55.0" prefWidth="433.0" spacing="100.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#onLogout" text="Logout">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+            <Button mnemonicParsing="false" onAction="#onLog" text="Log">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" layoutX="14.0" layoutY="252.0" prefHeight="76.0" prefWidth="403.0" spacing="10.0">
+         <children>
+            <TextField fx:id="textToBeSent" onAction="#onSend" prefHeight="32.0" prefWidth="255.0">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </TextField>
+            <Button mnemonicParsing="false" onAction="#onSend" text="Send">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+      <TableView fx:id="chatTextArea" layoutX="15.0" layoutY="14.0" prefHeight="229.0" prefWidth="403.0">
+         <columns>
+            <TableColumn fx:id="name" editable="false" prefWidth="75.0" sortType="DESCENDING" text="Name" />
+            <TableColumn fx:id="message" editable="false" maxWidth="330.0" minWidth="330.0" prefWidth="330.0" sortType="DESCENDING" text="Meesage" />
+         </columns>
+      </TableView>
+   </children>
+</AnchorPane>
