@@ -29,9 +29,6 @@ public class LogViewModel implements LocalListener<String, Message> {
     @Override
     public void propertyChange(ObserverEvent<String, Message> event) {
         Platform.runLater(() -> {
-//            if (event.getPropertyName().equals("Log")) {
-//                logText.add(event.getValue1());
-//            }
             logText.add(event.getValue1());
         });
     }

@@ -25,7 +25,7 @@ public class ModelManager implements Model {
     @Override
     public void addMessage(Message messageObject, String ip) throws Exception {
         chatClient.addMessage(messageObject, ip);
-        addLog(messageObject.toString());
+//        addLog(messageObject.toString());
     }
 
     public void addLog(String log) {

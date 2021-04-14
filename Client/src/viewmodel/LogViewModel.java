@@ -8,9 +8,6 @@ import javafx.collections.ObservableList;
 import utility.observer.event.ObserverEvent;
 import utility.observer.listener.LocalListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
 public class LogViewModel implements LocalListener<String, Message> {
     private Model model;
     private ObservableList<String> logText;
@@ -36,9 +33,6 @@ public class LogViewModel implements LocalListener<String, Message> {
         Platform.runLater(() -> {
             if (event.getPropertyName().equals("Log")) {
                 logText.add(event.getValue1());
-            }
-            else if (event.getPropertyName().equals("Message") && !event.getValue2().getUsr().equals(userInformation.getUser())){
-                model.addLog(event.getValue2().toString());
             }
         });
     }

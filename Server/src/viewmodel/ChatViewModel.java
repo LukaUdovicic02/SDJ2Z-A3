@@ -68,9 +68,6 @@ public class ChatViewModel implements LocalListener<String, Message> {
     public void propertyChange(ObserverEvent<String, Message> event) {
         Platform.runLater(() ->
         {
-//            if (event.getPropertyName().equals("Message")) {
-//                SendMessage(event.getValue2());
-//            }
             SendMessage(event.getValue2());
         });
     }
