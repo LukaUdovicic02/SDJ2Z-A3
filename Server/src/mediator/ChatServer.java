@@ -12,6 +12,7 @@ import java.rmi.Naming;
 import java.rmi.RemoteException;
 import java.rmi.registry.LocateRegistry;
 import java.rmi.registry.Registry;
+import java.rmi.server.ServerNotActiveException;
 import java.rmi.server.UnicastRemoteObject;
 
 public class ChatServer extends UnicastRemoteObject implements RemoteModel, LocalListener<String, Message> {
@@ -45,8 +46,8 @@ public class ChatServer extends UnicastRemoteObject implements RemoteModel, Loca
 
 
     @Override
-    public void addMessage(Message messageObject, String ip) throws RemoteException {
-        localModel.addMessage(messageObject, ip);
+    public void addMessage(Message messageObject, String ip) throws RemoteException, ServerNotActiveException {
+        localModel.addMessage(messageObject, getClientHost());
     }
 
     @Override
