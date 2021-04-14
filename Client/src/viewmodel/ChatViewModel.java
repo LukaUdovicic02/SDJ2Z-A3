@@ -7,11 +7,10 @@ import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import utility.observer.event.ObserverEvent;
+import utility.observer.listener.LocalListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-public class ChatViewModel implements PropertyChangeListener {
+public class ChatViewModel implements LocalListener<String,Message> {
     private Model model;
     private ObservableList<SimpleMessagesViewModel> list;
     private StringProperty usr, msg;
@@ -20,7 +19,7 @@ public class ChatViewModel implements PropertyChangeListener {
 
     public ChatViewModel(Model model, UserInformation userInformation) {
         this.model = model;
-        model.addListener(this);
+        model.addListener(this,"Message");
         this.usr = new SimpleStringProperty();
         this.msg = new SimpleStringProperty();
         list = FXCollections.observableArrayList();
@@ -47,24 +46,9 @@ public class ChatViewModel implements PropertyChangeListener {
         list.add(new SimpleMessagesViewModel(message));
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Platform.runLater(() ->
-        {
-            if (evt.getPropertyName().equals("Message")) {
-                try {
-                    Message m = (Message) evt.getNewValue();
-                    SendMessage(m);
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-                //
-            }
-        });
-    }
-    public void addMessage() throws Exception {
+    public void addMessage() {
         try{
-            model.addMessage(createMessageObject());
+            model.addMessage(createMessageObject(),"");
             msg.setValue(null);
         }
         catch (Exception e){
@@ -82,6 +66,19 @@ public class ChatViewModel implements PropertyChangeListener {
             e.printStackTrace();
         }
         return null;
+    }
 
+    @Override
+    public void propertyChange(ObserverEvent<String, Message> event) {
+        Platform.runLater(() ->
+        {
+                try {
+                    Message m = event.getValue2();
+                    SendMessage(m);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                //
+        });
     }
 }

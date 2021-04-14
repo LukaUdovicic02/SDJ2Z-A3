@@ -7,20 +7,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import model.Message;
 import model.Model;
+import utility.observer.event.ObserverEvent;
+import utility.observer.listener.LocalListener;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-
-public class ChatViewModel implements PropertyChangeListener {
+public class ChatViewModel implements LocalListener<String, Message> {
     private Model model;
     private ObservableList<SimpleMessagesViewModel> list;
     private StringProperty usr, msg;
     private UserInformation userInformation;
 
-
     public ChatViewModel(Model model,UserInformation userInformation) {
         this.model = model;
-        model.addListener(this);
+        model.addListener(this,"Message");
         this.usr = new SimpleStringProperty();
         this.msg = new SimpleStringProperty();
         list = FXCollections.observableArrayList();
@@ -47,16 +45,6 @@ public class ChatViewModel implements PropertyChangeListener {
         list.add(new SimpleMessagesViewModel(message));
     }
 
-    @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        Platform.runLater(() ->
-        {
-            if (evt.getPropertyName().equals("Message")) {
-                SendMessage((Message) evt.getNewValue());
-            }
-        });
-    }
-
     public void addMessage()
     {
         model.addMessage(createMessageObject(),"");
@@ -74,5 +62,16 @@ public class ChatViewModel implements PropertyChangeListener {
         }
         return null;
 
+    }
+
+    @Override
+    public void propertyChange(ObserverEvent<String, Message> event) {
+        Platform.runLater(() ->
+        {
+//            if (event.getPropertyName().equals("Message")) {
+//                SendMessage(event.getValue2());
+//            }
+            SendMessage(event.getValue2());
+        });
     }
 }

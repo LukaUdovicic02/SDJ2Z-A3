@@ -1,64 +1,68 @@
 package model;
 
 import mediator.ChatClient;
+import utility.observer.event.ObserverEvent;
+import utility.observer.listener.GeneralListener;
+import utility.observer.subject.PropertyChangeHandler;
 
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
 import java.beans.PropertyChangeSupport;
 import java.io.IOException;
+import java.rmi.RemoteException;
 
 
-public class ModelManager implements Model,PropertyChangeListener {
-    public static final String HOST = "localhost";
-    public static final int PORT = 2910;
-    private PropertyChangeSupport property;
-    private ChatClient client;
+public class ModelManager implements Model {
+    private PropertyChangeHandler<String, Message> property;
     private LogMultiton multiton;
+    private ChatClient chatClient;
 
     public ModelManager() throws IOException {
-        this.property = new PropertyChangeSupport(this);
-        this.client = new ChatClient(this, HOST, PORT);
-        client.addListener(this);
+        this.property = new PropertyChangeHandler<>(this,true);
+        this.chatClient = new ChatClient("localhost",this);
     }
 
     @Override
-    public void addMessage(Message messageObject) throws Exception {
-        client.addMessage(messageObject);
+    public void addMessage(Message messageObject, String ip) throws Exception {
+        chatClient.addMessage(messageObject, ip);
         addLog(messageObject.toString());
     }
 
     public void addLog(String log) {
         multiton = LogMultiton.getInstance(new DateTime().getSortableDate());
         String logLine = multiton.addLog(log);
-        property.firePropertyChange("Log" ,null, logLine);
+        property.firePropertyChange("Log" ,logLine, null);
     }
 
     @Override public boolean login(String name, String password)
             throws Exception
     {
-        return client.login(name, password);
+        return chatClient.login(name, password);
     }
 
     @Override public boolean registerUser(String name, String password)
             throws Exception
     {
-        return client.registerUser(name, password);
+        return chatClient.registerUser(name, password);
     }
 
     @Override
-    public void addListener(PropertyChangeListener listener) {
-        property.addPropertyChangeListener(listener);
-
+    public void receivedRemoteEvent(ObserverEvent<String, Message> event) {
+        property.firePropertyChange(event.getPropertyName(), event.getValue1(), event.getValue2());
     }
 
     @Override
-    public void removeListener(PropertyChangeListener listener) {
-        property.removePropertyChangeListener(listener);
-
+    public void close() throws RemoteException {
+        chatClient.close();
     }
 
     @Override
-    public void propertyChange(PropertyChangeEvent evt) {
-        property.firePropertyChange(evt.getPropertyName(), null, evt.getNewValue());
+    public boolean addListener(GeneralListener<String, Message> listener, String... propertyNames) {
+        return property.addListener(listener,propertyNames);
+    }
+
+    @Override
+    public boolean removeListener(GeneralListener<String, Message> listener, String... propertyNames) {
+        return property.removeListener(listener,propertyNames);
     }
 }
