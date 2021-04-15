@@ -2,9 +2,7 @@ package model;
 
 import persistence.UserFilePersistence;
 import persistence.UserListFile;
-
 import java.io.*;
-
 import java.util.List;
 
 public class UserList
