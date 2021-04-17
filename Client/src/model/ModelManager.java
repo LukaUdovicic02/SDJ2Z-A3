@@ -1,13 +1,11 @@
 package model;
 
 import mediator.ChatClient;
+import mediator.LocalClientModel;
 import utility.observer.event.ObserverEvent;
 import utility.observer.listener.GeneralListener;
 import utility.observer.subject.PropertyChangeHandler;
 
-import java.beans.PropertyChangeEvent;
-import java.beans.PropertyChangeListener;
-import java.beans.PropertyChangeSupport;
 import java.io.IOException;
 import java.rmi.RemoteException;
 
@@ -15,7 +13,7 @@ import java.rmi.RemoteException;
 public class ModelManager implements Model {
     private PropertyChangeHandler<String, Message> property;
     private LogMultiton multiton;
-    private ChatClient chatClient;
+    private LocalClientModel chatClient;
 
     public ModelManager() throws IOException {
         this.property = new PropertyChangeHandler<>(this,true);
